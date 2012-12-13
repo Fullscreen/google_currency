@@ -13,7 +13,12 @@ class Money
       attr_reader :rates
 
       # @return [true,false] Use Rails cache to store exchange rates
-      attr_accessor_with_default :use_cache, false
+      attr_writer :use_cache
+
+      # default value for use_cache
+      def use_cache
+        @use_cache || false
+      end
 
       ##
       # Clears all rates stored in @rates
