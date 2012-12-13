@@ -1,4 +1,4 @@
-Google Currency
+Google Currency with Rails.cache support
 ===============
 
 [![Build Status](https://secure.travis-ci.org/RubyMoney/google_currency.png)](http://travis-ci.org/RubyMoney/google_currency)
@@ -21,6 +21,7 @@ Usage
 
     # set default bank to instance of GoogleCurrency
     Money.default_bank = Money::Bank::GoogleCurrency.new
+    Money.default_bank.use_cache = true
 
     # create a new money object, and use the standard #exchange_to method
     n = 1.to_money(:USD)
