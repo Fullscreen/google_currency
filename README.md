@@ -21,6 +21,8 @@ Usage
 
     # set default bank to instance of GoogleCurrency
     Money.default_bank = Money::Bank::GoogleCurrency.new
+    
+    # instruct the currency bank to use Rails caching`
     Money.default_bank.use_cache = true
 
     # create a new money object, and use the standard #exchange_to method
