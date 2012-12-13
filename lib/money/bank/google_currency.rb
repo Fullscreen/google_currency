@@ -12,6 +12,9 @@ class Money
       # @return [Hash] Stores the currently known rates.
       attr_reader :rates
 
+      # @return [true,false] Use Rails cache to store exchange rates
+      attr_accessor_with_default :use_cache, false
+
       ##
       # Clears all rates stored in @rates
       #
@@ -46,6 +49,8 @@ class Money
         @mutex.synchronize{
           @rates.delete(key)
         }
+
+        Rails.cache.delete ('exchange_rate/#{key}') if use_cache
       end
 
       ##
@@ -60,9 +65,9 @@ class Money
       #   @bank = GoogleCurrency.new  #=> <Money::Bank::GoogleCurrency...>
       #   @bank.get_rate(:USD, :EUR)  #=> 0.776337241
       def get_rate(from, to)
-        @mutex.synchronize{
-          @rates[rate_key_for(from, to)] ||= fetch_rate(from, to)
-        }
+          @mutex.synchronize{
+              @rates[rate_key_for(from, to)] ||= use_cache ? Rails.cache.fetch('exchange_rate/#{rate_key_for(from, to)}', :expires_in => 1.day ) { fetch_rate(from, to) } : fetch_rate(from, to)
+          }
       end
 
       private
