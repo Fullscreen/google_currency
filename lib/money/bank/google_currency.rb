@@ -122,7 +122,8 @@ class Money
         data.gsub!(/error:/, '"error":')
         data.gsub!(/icc:/, '"icc":')
         data.gsub!(Regexp.new("(\\\\x..|\\\\240)"), '')
-
+        data = data.encode('utf-8', 'binary', :invalid => :replace, :undef => :replace, :replace => '')
+        
         MultiJson.decode(data)
       end
 
